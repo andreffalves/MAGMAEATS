@@ -1,3 +1,29 @@
+#include <stdlib.h>
+#include <stdio.h>
+void main_args(int argc, char* argv[], struct main_data* data){
+    if(argc!=6){
+        perror("Numero incorreto");
+        exit(1);
+    }
+    int max_ops = atoi(argv[1]);			//número máximo de operações
+    int buffers_size = atoi(argv[2]);		//tamanho máximo dos buffers de mem. partilhada
+
+    int n_restaurants = atoi(argv[3]);		//número de restaurantes
+    int n_drivers = atoi(argv[4]);			//número de motoristas
+    int n_clients = atoi(argv[5]);
+    if(max_ops==0||buffers_size==0||n_restaurants==0||n_drivers==0||n_clients==0){
+        perror("input incorreto");
+    }
+    data->max_ops = max_ops;
+    data->buffers_size = buffers_size;
+
+    data->n_restaurants = n_restaurants;
+    data->n_drivers = n_drivers;
+    data->n_clients =n_clients;
+
+}
+
+
 int main(int argc, char *argv[]) {
 //init data structures
     struct main_data* data = create_dynamic_memory(sizeof(struct
