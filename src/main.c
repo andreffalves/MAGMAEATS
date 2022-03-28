@@ -1,8 +1,10 @@
 #include <stdlib.h>
 #include <stdio.h>
+#include "main.h"
 void main_args(int argc, char* argv[], struct main_data* data){
     if(argc!=6){
-        perror("Numero incorreto");
+        perror("Uso: magnaeats max_ops buffers_size n_restaurants n_drivers n_clients\n"
+               "Exemplo: ./bin/magnaeats 10 10 1 1 1\n");
         exit(1);
     }
     int max_ops = atoi(argv[1]);			//número máximo de operações
@@ -12,7 +14,7 @@ void main_args(int argc, char* argv[], struct main_data* data){
     int n_drivers = atoi(argv[4]);			//número de motoristas
     int n_clients = atoi(argv[5]);
     if(max_ops==0||buffers_size==0||n_restaurants==0||n_drivers==0||n_clients==0){
-        perror("input incorreto");
+        perror("Parâmetros incorretos! Exemplo de uso: ./bin/magnaeats 10 10 1 1 1");
     }
     data->max_ops = max_ops;
     data->buffers_size = buffers_size;
@@ -20,7 +22,6 @@ void main_args(int argc, char* argv[], struct main_data* data){
     data->n_restaurants = n_restaurants;
     data->n_drivers = n_drivers;
     data->n_clients =n_clients;
-
 }
 
 
