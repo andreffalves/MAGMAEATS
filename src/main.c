@@ -1,6 +1,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include "main.h"
+#include "process.h"
 void main_args(int argc, char* argv[], struct main_data* data){
     if(argc!=6){
         perror("Uso: magnaeats max_ops buffers_size n_restaurants n_drivers n_clients\n"
@@ -22,6 +23,25 @@ void main_args(int argc, char* argv[], struct main_data* data){
     data->n_restaurants = n_restaurants;
     data->n_drivers = n_drivers;
     data->n_clients =n_clients;
+}
+
+
+void create_dynamic_memory_buffers(struct main_data* data){}
+
+
+void launch_processes(struct communication_buffers* buffers, struct main_data* data){
+    int num_drivers = data->n_drivers;
+    for (int i = 0; i < num_drivers; ++i) {
+        launch_restaurant(i,buffers,data);
+    }
+    int num_rest = data->n_restaurants;
+    for (int i = 0; i < num_drivers; ++i) {
+        launch_driver(i,buffers,data);
+    }
+    int num_clients = data->n_clients;
+    for (int i = 0; i < num_drivers; ++i) {
+        launch_client(i,buffers,data);
+    }
 }
 
 
