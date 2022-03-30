@@ -2,6 +2,35 @@
 #include <stdio.h>
 #include "main.h"
 #include "process.h"
+
+
+int main(int argc, char *argv[]) {
+//init data structures
+    struct main_data* data = create_dynamic_memory(sizeof(struct
+            main_data));
+    struct communication_buffers* buffers =
+            create_dynamic_memory(sizeof(struct communication_buffers));
+    buffers->main_rest = create_dynamic_memory(sizeof(struct
+            rnd_access_buffer));
+    buffers->rest_driv = create_dynamic_memory(sizeof(struct
+            circular_buffer));
+    buffers->driv_cli = create_dynamic_memory(sizeof(struct
+            rnd_access_buffer));
+//execute main code
+    main_args(argc, argv, data);
+    create_dynamic_memory_buffers(data);
+    create_shared_memory_buffers(data, buffers);
+    launch_processes(buffers, data);
+    user_interaction(buffers, data);
+//release memory before terminating
+    destroy_dynamic_memory(data);
+    destroy_dynamic_memory(buffers->main_rest);
+    destroy_dynamic_memory(buffers->rest_driv);
+    destroy_dynamic_memory(buffers->driv_cli);
+    destroy_dynamic_memory(buffers);
+}
+
+
 void main_args(int argc, char* argv[], struct main_data* data){
     if(argc!=6){
         perror("Uso: magnaeats max_ops buffers_size n_restaurants n_drivers n_clients\n"
@@ -35,38 +64,12 @@ void launch_processes(struct communication_buffers* buffers, struct main_data* d
         launch_restaurant(i,buffers,data);
     }
     int num_rest = data->n_restaurants;
-    for (int i = 0; i < num_drivers; ++i) {
+    for (int i = 0; i < num_rest; ++i) {
         launch_driver(i,buffers,data);
     }
     int num_clients = data->n_clients;
-    for (int i = 0; i < num_drivers; ++i) {
+    for (int i = 0; i < num_clients; ++i) {
         launch_client(i,buffers,data);
     }
 }
 
-
-int main(int argc, char *argv[]) {
-//init data structures
-    struct main_data* data = create_dynamic_memory(sizeof(struct
-            main_data));
-    struct communication_buffers* buffers =
-            create_dynamic_memory(sizeof(struct communication_buffers));
-    buffers->main_rest = create_dynamic_memory(sizeof(struct
-            rnd_access_buffer));
-    buffers->rest_driv = create_dynamic_memory(sizeof(struct
-            circular_buffer));
-    buffers->driv_cli = create_dynamic_memory(sizeof(struct
-            rnd_access_buffer));
-//execute main code
-    main_args(argc, argv, data);
-    create_dynamic_memory_buffers(data);
-    create_shared_memory_buffers(data, buffers);
-    launch_processes(buffers, data);
-    user_interaction(buffers, data);
-//release memory before terminating
-    destroy_dynamic_memory(data);
-    destroy_dynamic_memory(buffers->main_rest);
-    destroy_dynamic_memory(buffers->rest_driv);
-    destroy_dynamic_memory(buffers->driv_cli);
-    destroy_dynamic_memory(buffers);
-}
