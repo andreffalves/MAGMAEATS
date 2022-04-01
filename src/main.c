@@ -45,6 +45,7 @@ void main_args(int argc, char* argv[], struct main_data* data){
     int n_clients = atoi(argv[5]);
     if(max_ops==0||buffers_size==0||n_restaurants==0||n_drivers==0||n_clients==0){
         perror("Parâmetros incorretos! Exemplo de uso: ./bin/magnaeats 10 10 1 1 1");
+        exit(2);
     }
     data->max_ops = max_ops;
     data->buffers_size = buffers_size;

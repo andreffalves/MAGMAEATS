@@ -80,6 +80,8 @@ void write_main_rest_buffer(struct rnd_access_buffer* buffer, int buffer_size, s
             if(arr_free[i]==0){
                 //não sei se é correto a fazer
                 arr_ops[i]= *op;
+                arr_free[i]=1;
+                return;
             }
         }
     }
@@ -108,6 +110,8 @@ void write_driver_client_buffer(struct rnd_access_buffer* buffer, int buffer_siz
             if(arr_free[i]==0){
                 //não sei se é correto a fazer
                 arr_ops[i]= *op;
+                arr_free[1]=1;
+                return;
             }
         }
     }
