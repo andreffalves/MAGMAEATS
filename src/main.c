@@ -60,17 +60,24 @@ void create_dynamic_memory_buffers(struct main_data* data){}
 
 
 void launch_processes(struct communication_buffers* buffers, struct main_data* data){
-    int num_drivers = data->n_drivers;
-    for (int i = 0; i < num_drivers; ++i) {
-        launch_restaurant(i,buffers,data);
-    }
     int num_rest = data->n_restaurants;
     for (int i = 0; i < num_rest; ++i) {
-        launch_driver(i,buffers,data);
+        pid = launch_restaurant(i,buffers,data);
+        (data->restaurant_pids)[i] = pid;
     }
+
+    int num_drivers = data->n_drivers;
+    int pid;
+    for (int i = 0; i < num_drivers; ++i) {
+        pid = launch_driver(i,buffers,data);
+        (data->restaurant_pids)[i] = pid;
+    }
+
     int num_clients = data->n_clients;
     for (int i = 0; i < num_clients; ++i) {
-        launch_client(i,buffers,data);
+        pid = launch_client(i,buffers,data);
+        (data->client_pids)[i] = pid;
     }
+
 }
 
