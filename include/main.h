@@ -64,9 +64,10 @@ void launch_processes(struct communication_buffers* buffers, struct main_data* d
 void user_interaction(struct communication_buffers* buffers, struct main_data* data);
 
 /* Se o limite de operações ainda não tiver sido atingido, cria uma nova
-* operação identificada pelo valor atual de op_counter e com os dados passados em
-* argumento, escrevendo a mesma no buffer de memória partilhada entre main e restaurantes.
-* Imprime o id da operação e incrementa o contador de operações op_counter.
+* operação identificada pelo valor atual de op_counter e com os dados introduzidos
+* pelo utilizador na linha de comandos, escrevendo a mesma no buffer de memória
+* partilhada entre main e restaurantes. Imprime o id da operação e incrementa o
+* contador de operações op_counter.
 */
 void create_request(int* op_counter, struct communication_buffers* buffers, struct main_data* data);
 

@@ -7,12 +7,12 @@
 
 
 /* Função principal de um Cliente. Deve executar um ciclo infinito onde em 
-* cada iteração lê uma operação da main e data->terminate ainda for igual a 0,
-* processa-a e guarda o resultado no histórico de operações da Main.
-* Operações com id igual a -1 são ignoradas (op inválida) e se
-* data->terminate for igual a 1 é porque foi dada ordem de terminação do programa,
-* portanto deve-se fazer return do o número de operações processadas. Para efetuar
-* estes passos, pode usar os outros métodos auxiliares definidos em client.h. 
+* cada iteração lê uma operação dos motoristas e se e data->terminate ainda 
+* for igual a 0, processa-a. Operações com id igual a -1 são ignoradas
+* (op inválida) e se data->terminate for igual a 1 é porque foi dada ordem
+* de terminação do programa, portanto deve-se fazer return do número de 
+* operações processadas. Para efetuar estes passos, pode usar os outros
+* métodos auxiliares definidos em client.h.
 */
 int execute_client(int client_id, struct communication_buffers* buffers, struct main_data* data);
 

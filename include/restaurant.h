@@ -32,7 +32,8 @@ void restaurant_process_operation(struct operation* op, int rest_id, struct main
 
 
 /* Função que escreve uma operação no buffer de memória partilhada entre
-* restaurantes e motoristas.
+* restaurantes e motoristas, efetuando a necessária sincronização antes e
+* depois de escrever.
 */
 void restaurant_forward_operation(struct operation* op, struct communication_buffers* buffers, struct main_data* data);
 
