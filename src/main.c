@@ -117,6 +117,7 @@ void user_interaction(struct communication_buffers* buffers, struct main_data* d
         }
         else if (strcmp(buffer,"stop")==0){
             stop_execution(data,buffers);
+            return;
         }
         else{
             printf("Ação não reconhecida, insira 'help' para assistência.\n");
@@ -132,14 +133,24 @@ void create_shared_memory_buffers(struct main_data* data, struct communication_b
     int bufs = data->buffers_size;
 
 
-    buffers->main_rest = create_shared_memory(STR_SHM_MAIN_REST_PTR,sizeof(struct rnd_access_buffer*));
-    (buffers->main_rest)->buffer =create_shared_memory(STR_SHM_MAIN_REST_BUFFER,sizeof(struct rnd_access_buffer)*bufs);
+    buffers->main_rest->ptrs = create_shared_memory(STR_SHM_MAIN_REST_PTR,sizeof(int)*bufs);
+    buffers->main_rest->buffer =create_shared_memory(STR_SHM_MAIN_REST_BUFFER,sizeof(struct operation)*bufs);
 
-    buffers->rest_driv = create_shared_memory(STR_SHM_REST_DRIVER_PTR,sizeof(struct circular_buffer*));
-    (buffers->rest_driv)->buffer = create_shared_memory(STR_SHM_REST_DRIVER_BUFFER,sizeof(struct circular_buffer)*bufs);
+    buffers->rest_driv->ptrs = create_shared_memory(STR_SHM_REST_DRIVER_PTR,sizeof(struct pointers));
+    buffers->rest_driv->buffer = create_shared_memory(STR_SHM_REST_DRIVER_BUFFER,sizeof(struct circular_buffer)*bufs);
 
-    buffers->driv_cli = create_shared_memory(STR_SHM_DRIVER_CLIENT_PTR,sizeof(struct rnd_access_buffer*));
+    buffers->driv_cli = create_shared_memory(STR_SHM_DRIVER_CLIENT_PTR,sizeof(int)*bufs);
     (buffers->driv_cli)->buffer = create_shared_memory(STR_SHM_DRIVER_CLIENT_BUFFER,sizeof(struct rnd_access_buffer)*bufs);
 
+
+}
+
+
+void read_status(struct main_data* data){
+    int temp = -1;
+    scanf("%d",temp);
+    if(temp==-1|(temp>data->max_ops)){
+        printf("id de pedido fornecido é inválido!")
+    }
 
 }
