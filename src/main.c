@@ -158,12 +158,20 @@ void read_status(struct main_data* data){
 
 void wait_processes(struct main_data* data){
     for (int i = 0; i < data->n_restaurants; ++i) {
-        wait_process(data->restaurant_pids[i]);
+        data->restaurant_stats[i] = wait_process(data->restaurant_pids[i]);
     }
     for (int i = 0; i < data->n_drivers; ++i) {
-        wait_process(data->driver_pids[i]);
+        data->driver_stats[i] = wait_process(data->driver_pids[i]);
     }
     for (int i = 0; i < data->n_clients; ++i) {
-        wait_process(data->client_pids[i]);
+        data->client_stats[i] = wait_process(data->client_pids[i]);
     }
+}
+
+
+void stop_execution(struct main_data* data, struct communication_buffers* buffers){
+    *(data->terminate)=1;
+    wait_processes(data);
+    write_statistics(data);
+    destroy_memory_buffers(data,buffers);
 }
