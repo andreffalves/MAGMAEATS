@@ -92,7 +92,7 @@ void launch_processes(struct communication_buffers* buffers, struct main_data* d
 
 void user_interaction(struct communication_buffers* buffers, struct main_data* data){
     char buffer[50];
-    int* op_counter = 0;
+    int op_counter = 0;
     printf("Ações disponíveis:\n"
            "        request client restaurant dish - criar um novo pedido\n"
            "        status id - consultar o estado de um pedido\n"
@@ -112,7 +112,7 @@ void user_interaction(struct communication_buffers* buffers, struct main_data* d
             read_status(data);
         }
         else if(strcmp(buffer,"request")==0){
-            create_request(op_counter,buffers,data);
+            create_request(&op_counter,buffers,data);
             op_counter++;
         }
         else if (strcmp(buffer,"stop")==0){
@@ -137,10 +137,10 @@ void create_shared_memory_buffers(struct main_data* data, struct communication_b
     buffers->main_rest->buffer =create_shared_memory(STR_SHM_MAIN_REST_BUFFER,sizeof(struct operation)*bufs);
 
     buffers->rest_driv->ptrs = create_shared_memory(STR_SHM_REST_DRIVER_PTR,sizeof(struct pointers));
-    buffers->rest_driv->buffer = create_shared_memory(STR_SHM_REST_DRIVER_BUFFER,sizeof(struct circular_buffer)*bufs);
+    buffers->rest_driv->buffer = create_shared_memory(STR_SHM_REST_DRIVER_BUFFER,sizeof(struct operation)*bufs);
 
-    buffers->driv_cli = create_shared_memory(STR_SHM_DRIVER_CLIENT_PTR,sizeof(int)*bufs);
-    (buffers->driv_cli)->buffer = create_shared_memory(STR_SHM_DRIVER_CLIENT_BUFFER,sizeof(struct rnd_access_buffer)*bufs);
+    buffers->driv_cli->ptrs = create_shared_memory(STR_SHM_DRIVER_CLIENT_PTR,sizeof(int)*bufs);
+    buffers->driv_cli->buffer = create_shared_memory(STR_SHM_DRIVER_CLIENT_BUFFER,sizeof(struct operation)*bufs);
 
 
 }
@@ -174,4 +174,75 @@ void stop_execution(struct main_data* data, struct communication_buffers* buffer
     wait_processes(data);
     write_statistics(data);
     destroy_memory_buffers(data,buffers);
+}
+
+
+void destroy_memory_buffers(struct main_data* data, struct communication_buffers* buffers){
+    int bufs = data->buffers_size;
+    destroy_dynamic_memory(data->restaurant_pids);
+    destroy_dynamic_memory(data->driver_pids);
+    destroy_dynamic_memory(data->client_pids);
+
+    destroy_dynamic_memory(data->restaurant_stats);
+    destroy_dynamic_memory(data->driver_stats);
+    destroy_dynamic_memory(data->client_stats);
+
+    destroy_shared_memory(STR_SHM_RESULTS,data->results,sizeof(struct operation)*data->max_ops);
+    destroy_shared_memory(STR_SHM_TERMINATE,data->terminate,sizeof(int));
+
+    destroy_shared_memory(STR_SHM_MAIN_REST_PTR,buffers->main_rest->ptrs,sizeof(int)*bufs);
+    destroy_shared_memory(STR_SHM_MAIN_REST_BUFFER,buffers->main_rest->buffer,sizeof(struct operation)*bufs);
+
+    destroy_shared_memory(STR_SHM_REST_DRIVER_PTR,buffers->rest_driv->ptrs,sizeof(struct pointers));
+    destroy_shared_memory(STR_SHM_REST_DRIVER_BUFFER,buffers->rest_driv->buffer,sizeof(struct operation)*bufs);
+
+    destroy_shared_memory(STR_SHM_DRIVER_CLIENT_PTR,buffers->driv_cli->ptrs,sizeof(int)*bufs);
+    destroy_shared_memory(STR_SHM_DRIVER_CLIENT_BUFFER,buffers->driv_cli->buffer,sizeof(struct operation)*bufs);
+
+}
+
+
+void write_statistics(struct main_data* data){
+    int num_rest = data->n_restaurants;
+    for (int i = 0; i < num_rest; ++i) {
+        printf("Restaurante %d preparou %d pedidos\n",i,data->restaurant_stats[i]);
+    }
+
+    int num_driv = data->n_drivers;
+    for (int i = 0; i < num_driv; ++i) {
+        printf("Motorista %d entregou %d pedidos\n",i,data->driver_stats[i]);
+    }
+
+    int num_cli = data->n_clients;
+    for (int i = 0; i < num_cli; ++i) {
+        printf("Cliente %d recebeu %d pedidos\n",i,data->client_stats[i]);
+    }
+}
+
+
+void create_request(int* op_counter, struct communication_buffers* buffers, struct main_data* data){
+    int client = -1;
+    int rest = -1;
+    char* dish = create_dynamic_memory(sizeof(char )*100);
+    scanf("%d",&client);
+    scanf("%d",&rest);
+    //não funciona for some reason
+    scanf("%s",dish);
+    printf("alpha");
+    if((*op_counter)>(data->max_ops)){
+        printf("O número máximo de pedidos foi alcançado!\n");
+    }
+    else{
+        printf("%d %d %s",client,rest, dish);
+        struct operation* dummy = malloc(sizeof (struct operation));
+
+        dummy->id=*op_counter;
+        dummy->requested_rest=rest;
+        dummy->requesting_client=client;
+        dummy->requested_dish = dish;
+
+        dummy->status = 'I';
+        write_main_rest_buffer(buffers->main_rest,data->buffers_size,dummy);
+        free(dummy);
+    }
 }
