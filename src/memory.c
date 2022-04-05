@@ -24,7 +24,7 @@ void destroy_dynamic_memory(void *ptr){
 void* create_shared_memory(char* name, int size){
     int *ptr;
     int id = getuid();
-    char* zone = calloc(strlen(name)+1+10,1);
+    char* zone = create_dynamic_memory(strlen(name)+1+10);
     int result = sprintf(zone,"/%s-%d",name,id);
     if(result==-1){
         perror(name);
@@ -45,7 +45,7 @@ void* create_shared_memory(char* name, int size){
         perror("mmap");
         exit(4);
     }
-    free(zone);
+    destroy_dynamic_memory(zone);
     return ptr;
 }
 
@@ -53,7 +53,7 @@ void* create_shared_memory(char* name, int size){
 void destroy_shared_memory(char* name, void* ptr, int size){
     int id = getuid();
     int ret;
-    char* zone = calloc(strlen(name)+1+10,1);
+    char* zone = create_dynamic_memory(strlen(name)+1+10);
     int result = sprintf(zone,"/%s-%d",name,id);
     if(result==-1){
         perror(name);
@@ -69,6 +69,7 @@ void destroy_shared_memory(char* name, void* ptr, int size){
         perror(zone);
         exit(8);
     }
+    destroy_dynamic_memory(zone);
 }
 
 

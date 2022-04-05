@@ -1,8 +1,8 @@
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 #include "main.h"
 #include "process.h"
-
 
 int main(int argc, char *argv[]) {
 //init data structures
@@ -56,13 +56,21 @@ void main_args(int argc, char* argv[], struct main_data* data){
 }
 
 
-void create_dynamic_memory_buffers(struct main_data* data){}
+void create_dynamic_memory_buffers(struct main_data* data){
+    data->restaurant_pids = create_dynamic_memory(sizeof(int) * data->n_restaurants);
+    data->driver_pids = create_dynamic_memory(sizeof(int) * data->n_drivers);
+    data->client_pids = create_dynamic_memory(sizeof(int) * data->n_clients);
+
+    data->restaurant_stats = malloc(sizeof(int) * data->n_restaurants);
+    data->driver_stats = create_dynamic_memory(sizeof(int) * data->n_drivers);
+    data->client_stats = create_dynamic_memory(sizeof(int) * data->n_clients);
+}
 
 
 void launch_processes(struct communication_buffers* buffers, struct main_data* data){
     int num_rest = data->n_restaurants;
     for (int i = 0; i < num_rest; ++i) {
-        pid = launch_restaurant(i,buffers,data);
+        int pid = launch_restaurant(i,buffers,data);
         (data->restaurant_pids)[i] = pid;
     }
 
@@ -81,3 +89,57 @@ void launch_processes(struct communication_buffers* buffers, struct main_data* d
 
 }
 
+
+void user_interaction(struct communication_buffers* buffers, struct main_data* data){
+    char buffer[50];
+    int* op_counter = 0;
+    printf("Ações disponíveis:\n"
+           "        request client restaurant dish - criar um novo pedido\n"
+           "        status id - consultar o estado de um pedido\n"
+           "        stop - termina a execução do magnaeats.\n"
+           "        help - imprime informação sobre as ações disponíveis.");
+    while (1){
+        printf("Introduzir ação:\n");
+        scanf("%s",buffer);
+        if(strcmp(buffer,"help")==0){
+            printf("Ações disponíveis:\n"
+                   "        request client restaurant dish - criar um novo pedido\n"
+                   "        status id - consultar o estado de um pedido\n"
+                   "        stop - termina a execução do magnaeats.\n"
+                   "        help - imprime informação sobre as ações disponíveis.");
+        }
+        else if(strcmp(buffer,"status")==0){
+            read_status(data);
+        }
+        else if(strcmp(buffer,"request")==0){
+            create_request(op_counter,buffers,data);
+            op_counter++;
+        }
+        else if (strcmp(buffer,"stop")==0){
+            stop_execution(data,buffers);
+        }
+        else{
+            printf("Ação não reconhecida, insira 'help' para assistência.\n");
+        }
+
+    }
+}
+
+
+void create_shared_memory_buffers(struct main_data* data, struct communication_buffers* buffers){
+    data->results = create_shared_memory(STR_SHM_RESULTS,sizeof(struct operation)*data->max_ops);
+    data->terminate = create_shared_memory(STR_SHM_TERMINATE,sizeof(int));
+    int bufs = data->buffers_size;
+
+
+    buffers->main_rest = create_shared_memory(STR_SHM_MAIN_REST_PTR,sizeof(struct rnd_access_buffer*));
+    (buffers->main_rest)->buffer =create_shared_memory(STR_SHM_MAIN_REST_BUFFER,sizeof(struct rnd_access_buffer)*bufs);
+
+    buffers->rest_driv = create_shared_memory(STR_SHM_REST_DRIVER_PTR,sizeof(struct circular_buffer*));
+    (buffers->rest_driv)->buffer = create_shared_memory(STR_SHM_REST_DRIVER_BUFFER,sizeof(struct circular_buffer)*bufs);
+
+    buffers->driv_cli = create_shared_memory(STR_SHM_DRIVER_CLIENT_PTR,sizeof(struct rnd_access_buffer*));
+    (buffers->driv_cli)->buffer = create_shared_memory(STR_SHM_DRIVER_CLIENT_BUFFER,sizeof(struct rnd_access_buffer)*bufs);
+
+
+}
