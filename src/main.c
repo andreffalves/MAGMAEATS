@@ -148,9 +148,22 @@ void create_shared_memory_buffers(struct main_data* data, struct communication_b
 
 void read_status(struct main_data* data){
     int temp = -1;
-    scanf("%d",temp);
-    if(temp==-1|(temp>data->max_ops)){
-        printf("id de pedido fornecido é inválido!")
+    scanf("%d",&temp);
+    if((temp==-1)|(temp>data->max_ops)){
+        printf("id de pedido fornecido é inválido!");
     }
 
+}
+
+
+void wait_processes(struct main_data* data){
+    for (int i = 0; i < data->n_restaurants; ++i) {
+        wait_process(data->restaurant_pids[i]);
+    }
+    for (int i = 0; i < data->n_drivers; ++i) {
+        wait_process(data->driver_pids[i]);
+    }
+    for (int i = 0; i < data->n_clients; ++i) {
+        wait_process(data->client_pids[i]);
+    }
 }
