@@ -157,7 +157,11 @@ void read_status(struct main_data* data){
         printf("Pedido %d ainda não é váldio!\n",temp);
     }
     else{
-
+        switch (temp_op.status) {
+            case 'I':
+                printf("Pedido %d com estado %c requisitado pelo cliente %d ao restaurante %d com o prato %s, ainda não foi recebido no restaurante!\n",
+                       temp_op.id,temp_op.status,temp_op.requesting_client,temp_op.requested_rest,temp_op.requested_dish);
+        }
     }
 }
 
@@ -247,5 +251,7 @@ void create_request(int* op_counter, struct communication_buffers* buffers, stru
         write_main_rest_buffer(buffers->main_rest,data->buffers_size,dummy);
         printf("Pedido #%d foi criado!\n",dummy->id);
         data->results[dummy->id] = *dummy;
+        //free(dummy->requested_dish);
+        free(dummy);
     }
 }

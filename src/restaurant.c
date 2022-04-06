@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <string.h>
 #include "main.h"
 #include "memory.h"
 #include "restaurant.h"
@@ -23,6 +24,7 @@ int execute_restaurant(int rest_id, struct communication_buffers* buffers, struc
             return ops;
         }
         else {
+            memset(op,0,sizeof (struct operation));
             op->id=-1;
             restaurant_receive_operation(op, rest_id, buffers, data);
             if(op->id != -1){
@@ -45,7 +47,7 @@ void restaurant_receive_operation(struct operation* op, int rest_id, struct comm
 
 void restaurant_process_operation(struct operation* op, int rest_id, struct main_data* data, int* counter){
     printf("O restaurante recebeu o pedido!");
-    op->requested_rest = rest_id;
+    op->receiving_rest = rest_id;
     op->status = 'R';
     (*counter)++;
     data->results[op->id] = *op;

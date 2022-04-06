@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <string.h>
 #include "memory.h"
 #include "main.h"
 #include "driver.h"
@@ -14,7 +15,7 @@ int execute_driver(int driver_id, struct communication_buffers* buffers, struct 
             return ops;
         }
         else{
-
+            memset(op,0,sizeof (struct operation));
             op->id=-1;
             driver_receive_operation(op, buffers, data);
             if(op->id != -1){

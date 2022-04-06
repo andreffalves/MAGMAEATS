@@ -79,7 +79,6 @@ void write_main_rest_buffer(struct rnd_access_buffer* buffer, int buffer_size, s
     while (1){
         for (int i = 0; i < buffer_size; ++i) {
             if(arr_free[i]==0){
-                //não sei se é correto a fazer
                 arr_ops[i]= *op;
                 arr_free[i]=1;
                 return;
@@ -124,7 +123,7 @@ void read_main_rest_buffer(struct rnd_access_buffer* buffer, int rest_id, int bu
     struct operation* arr_ops = buffer->buffer;
     for (int i = 0; i < buffer_size; ++i) {
         if(ptrs[i]==1){
-            int op_rest_id =  arr_ops[i].receiving_rest;
+            int op_rest_id =  arr_ops[i].requested_rest;
             if(op_rest_id==rest_id){
                 op = &arr_ops[i];
                 ptrs[i]=0;

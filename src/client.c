@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <string.h>
 #include "memory.h"
 #include "main.h"
 #include "client.h"
@@ -14,7 +15,7 @@ int execute_client(int client_id, struct communication_buffers* buffers, struct 
             return ops;
         }
         else{
-
+            memset(op,0,sizeof (struct operation));
             op->id=-1;
             client_get_operation(op, client_id, buffers, data);
             if(op->id != -1){
