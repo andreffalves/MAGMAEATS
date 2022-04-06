@@ -6,19 +6,22 @@
 int execute_driver(int driver_id, struct communication_buffers* buffers, struct main_data* data){
     int ops = 0;
     int terminate_flag = *(data->terminate);
+    struct operation* op = create_dynamic_memory(sizeof (struct operation));
     while (1){
         terminate_flag = *(data->terminate);
-        if(terminate_flag == 1)
+        if(terminate_flag == 1) {
+            destroy_dynamic_memory(op);
             return ops;
+        }
         else{
-            struct operation* op = create_dynamic_memory(sizeof (struct operation));
+
             op->id=-1;
             driver_receive_operation(op, buffers, data);
             if(op->id != -1){
                 driver_process_operation(op, driver_id, data, &ops);
                 driver_send_answer(op, buffers, data);
             }
-            destroy_dynamic_memory(op);
+
         }
     }
 }

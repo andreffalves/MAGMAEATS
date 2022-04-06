@@ -106,7 +106,7 @@ void user_interaction(struct communication_buffers* buffers, struct main_data* d
                    "        request client restaurant dish - criar um novo pedido\n"
                    "        status id - consultar o estado de um pedido\n"
                    "        stop - termina a execução do magnaeats.\n"
-                   "        help - imprime informação sobre as ações disponíveis.");
+                   "        help - imprime informação sobre as ações disponíveis.\n");
         }
         else if(strcmp(buffer,"status")==0){
             read_status(data);
@@ -150,9 +150,15 @@ void read_status(struct main_data* data){
     int temp = -1;
     scanf("%d",&temp);
     if((temp==-1)|(temp>data->max_ops)){
-        printf("id de pedido fornecido é inválido!");
+        printf("id de pedido fornecido é inválido!\n");
     }
+    struct operation temp_op = data->results[temp];
+    if(temp_op.requested_dish==NULL){
+        printf("Pedido %d ainda não é váldio!\n",temp);
+    }
+    else{
 
+    }
 }
 
 
@@ -226,16 +232,12 @@ void create_request(int* op_counter, struct communication_buffers* buffers, stru
     char* dish = create_dynamic_memory(sizeof(char )*100);
     scanf("%d",&client);
     scanf("%d",&rest);
-    //não funciona for some reason
     scanf("%s",dish);
-    printf("alpha");
     if((*op_counter)>(data->max_ops)){
         printf("O número máximo de pedidos foi alcançado!\n");
     }
     else{
-        printf("%d %d %s",client,rest, dish);
         struct operation* dummy = malloc(sizeof (struct operation));
-
         dummy->id=*op_counter;
         dummy->requested_rest=rest;
         dummy->requesting_client=client;
@@ -243,6 +245,7 @@ void create_request(int* op_counter, struct communication_buffers* buffers, stru
 
         dummy->status = 'I';
         write_main_rest_buffer(buffers->main_rest,data->buffers_size,dummy);
-        free(dummy);
+        printf("Pedido #%d foi criado!\n",dummy->id);
+        data->results[dummy->id] = *dummy;
     }
 }
