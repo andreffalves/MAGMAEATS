@@ -168,8 +168,7 @@ void read_status(struct main_data* data){
                 printf("Pedido %d com estado %c requisitado pelo cliente %d ao restaurante %d com o prato %s, foi levantado por o motorista %d e ainda não foi entrege ao cliente%d!\n",
                        temp_op.id,temp_op.status,temp_op.requesting_client,temp_op.requested_rest,temp_op.requested_dish,temp_op.receiving_driver,temp_op.requesting_client);
             case 'C':
-                printf("Pedido %d com estado %c requisitado pelo cliente %d ao restaurante %d com o prato %s, foi tratado pelo restaurante %d, encaminhado pelo 
-                motorista %d, e enviado ao cliente %d!\n",
+                printf("Pedido %d com estado %c requisitado pelo cliente %d ao restaurante %d com o prato %s, foi tratado pelo restaurante %d, encaminhado pelo motorista %d, e enviado ao cliente %d!\n",
                        temp_op.id,temp_op.status,temp_op.requesting_client,temp_op.requested_rest,temp_op.requested_dish,temp_op.receiving_rest,temp_op.receiving_driver,temp_op.receiving_client);
         }
     }
