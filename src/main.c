@@ -97,7 +97,7 @@ void user_interaction(struct communication_buffers* buffers, struct main_data* d
            "        request client restaurant dish - criar um novo pedido\n"
            "        status id - consultar o estado de um pedido\n"
            "        stop - termina a execução do magnaeats.\n"
-           "        help - imprime informação sobre as ações disponíveis.");
+           "        help - imprime informação sobre as ações disponíveis.\n");
     while (1){
         printf("Introduzir ação:\n");
         scanf("%s",buffer);
