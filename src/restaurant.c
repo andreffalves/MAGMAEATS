@@ -14,7 +14,6 @@
 
 
 int execute_restaurant(int rest_id, struct communication_buffers* buffers, struct main_data* data){
-    printf("ENTREI%d\n",rest_id);
     int ops = 0;
     int terminate_flag = *(data->terminate);
     struct operation* op = create_dynamic_memory(sizeof (struct operation));
