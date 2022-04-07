@@ -1,0 +1,15 @@
+Erros no magnaeats:
+
+ -> Ao fazer um request as vezes o condutor vai buscar o mesmo pedido varias vezes e consequentemente entrega varias vezes
+ 
+ -> Ao usar mais clientes do que o maximo defenido na execução do programa o pedido simplesmente não é entregado ao cliente em vez de dar uma msg de erro, isto acontence também para o restaurante.
+ 
+ -> É possivel introduzir campos negativos ao fazer request(Não sei se isto é permitido já que não vi nada no enunciado a restringir este facto)
+ 
+ -> As strings "restaurante/condutor/cliente receberam o pedido" aparecem depois do "Introduzir ação:"
+ 
+ -> Status aceita um id negativo(outra vez não sei se isto tem que ser restringido)
+ 
+ -> Ao fazer request com mais de 3 campos ele aceita na mesma, faz o procedimento e depois faz o help
+ 
+ ->
