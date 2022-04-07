@@ -78,7 +78,7 @@ void launch_processes(struct communication_buffers* buffers, struct main_data* d
     int pid;
     for (int i = 0; i < num_drivers; ++i) {
         pid = launch_driver(i,buffers,data);
-        (data->restaurant_pids)[i] = pid;
+        (data->driver_pids)[i] = pid;
     }
 
     int num_clients = data->n_clients;
