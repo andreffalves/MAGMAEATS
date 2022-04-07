@@ -161,15 +161,19 @@ void read_status(struct main_data* data){
             case 'I':
                 printf("Pedido %d com estado %c requisitado pelo cliente %d ao restaurante %d com o prato %s, ainda não foi recebido no restaurante!\n",
                        temp_op.id,temp_op.status,temp_op.requesting_client,temp_op.requested_rest,temp_op.requested_dish);
+                break;
             case 'R':
                 printf("Pedido %d com estado %c requisitado pelo cliente %d ao restaurante %d com o prato %s,foi recebido pelo restaurant %d ainda não foi levantado por um motorista!\n",
                        temp_op.id,temp_op.status,temp_op.requesting_client,temp_op.requested_rest,temp_op.requested_dish,temp_op.receiving_rest);
+                break;
             case 'D':
                 printf("Pedido %d com estado %c requisitado pelo cliente %d ao restaurante %d com o prato %s, foi levantado por o motorista %d e ainda não foi entrege ao cliente%d!\n",
                        temp_op.id,temp_op.status,temp_op.requesting_client,temp_op.requested_rest,temp_op.requested_dish,temp_op.receiving_driver,temp_op.requesting_client);
+                break;
             case 'C':
                 printf("Pedido %d com estado %c requisitado pelo cliente %d ao restaurante %d com o prato %s, foi tratado pelo restaurante %d, encaminhado pelo motorista %d, e enviado ao cliente %d!\n",
                        temp_op.id,temp_op.status,temp_op.requesting_client,temp_op.requested_rest,temp_op.requested_dish,temp_op.receiving_rest,temp_op.receiving_driver,temp_op.receiving_client);
+                break;
         }
     }
 }
@@ -205,6 +209,13 @@ void destroy_memory_buffers(struct main_data* data, struct communication_buffers
     destroy_dynamic_memory(data->restaurant_stats);
     destroy_dynamic_memory(data->driver_stats);
     destroy_dynamic_memory(data->client_stats);
+
+    int i = 0;
+    while(data->results[i].requested_dish !=NULL){
+        destroy_dynamic_memory(data->results[i].requested_dish);
+        i++;
+    }
+
 
     destroy_shared_memory(STR_SHM_RESULTS,data->results,sizeof(struct operation)*data->max_ops);
     destroy_shared_memory(STR_SHM_TERMINATE,data->terminate,sizeof(int));
