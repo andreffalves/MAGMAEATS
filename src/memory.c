@@ -103,29 +103,38 @@ void read_main_rest_buffer(struct rnd_access_buffer* buffer, int rest_id, int bu
 }
 
 void write_rest_driver_buffer(struct circular_buffer* buffer, int buffer_size, struct operation* op){
+    struct operation next_produced = *op;
     struct pointers *ptr = buffer->ptrs;
-    int in  = ptr->in;
-    int out = ptr->out;
     struct operation* arr_ops = buffer->buffer;
-    while((in+1)%buffer_size==out){
-        __asm__("nop");
+    while(((ptr->in)+1)%buffer_size==(ptr->out)){
     }
-    arr_ops[in] = *op;
-    in = (in+1)%buffer_size;
+    arr_ops[ptr->in] = next_produced;
+    ptr->in = (ptr->in+1)%buffer_size;
 }
 
 
+void read_rest_driver_buffer(struct circular_buffer* buffer, int buffer_size, struct operation* op){
+    struct pointers *ptr = buffer->ptrs;
+    struct operation* ops = buffer->buffer;
+    if((ptr->in)==(ptr->out)){
+        op->id=-1;
+    } else{
+        *op = ops[(ptr->out)];
+        (ptr->out)= ((ptr->out)+1)%buffer_size;
+    }
+}
 
 void write_driver_client_buffer(struct rnd_access_buffer* buffer, int buffer_size, struct operation* op){
-    int* arr_free = buffer->ptrs;
-    struct operation* arr_ops = buffer->buffer;
+    struct operation next_produced = *op;
+    int n;
     while (1){
-        for (int i = 0; i < buffer_size; ++i) {
-            if(arr_free[i]==0){
-                //não sei se é correto a fazer
-                arr_ops[i]= *op;
-                arr_free[1]=1;
-                return;
+        for (n = 0; n < buffer_size; n++) {
+            for(n=0;n<buffer_size;n++) {
+                if (((buffer->ptrs)[n]) == 0) {
+                    ((buffer->ptrs)[n]) = 1;
+                    ((buffer->buffer)[n]) = next_produced;
+                    return;
+                }
             }
         }
     }
@@ -133,29 +142,28 @@ void write_driver_client_buffer(struct rnd_access_buffer* buffer, int buffer_siz
 
 
 
-void read_rest_driver_buffer(struct circular_buffer* buffer, int buffer_size, struct operation* op){
-    struct pointers *ptr = buffer->ptrs;
-    struct operation* ops = buffer->buffer;
-    int in  = ptr->in;
-    int out = ptr->out;
-    if(in==out){
-        op->id=-1;
-    } else{
-        op = &ops[out];
-        buffer->ptrs->out= (out+1)%buffer_size;
+/*
+  void read_main_rest_buffer(struct rnd_access_buffer* buffer, int rest_id, int buffer_size, struct operation* op){
+    int n;
+    for (n = 0; n < buffer_size; n++) {
+        if(((buffer->ptrs)[n])==1){
+            if((((buffer->buffer)[n]).requested_rest)==rest_id) {
+                (buffer->ptrs)[n] = 0;
+                *op = (buffer->buffer)[n];
+                return;
+            }
+        }
     }
-}
-
+    op->id=-1;
+}*/
 
 void read_driver_client_buffer(struct rnd_access_buffer* buffer, int client_id, int buffer_size, struct operation* op){
-    int* ptrs = buffer->ptrs;
-    struct operation* arr_ops = buffer->buffer;
-    for (int i = 0; i < buffer_size; ++i) {
-        if(ptrs[i]==1){
-            int op_rest_id =  arr_ops[i].receiving_rest;
-            if(op_rest_id==client_id){
-                op = &arr_ops[i];
-                ptrs[i]=0;
+    int n;
+    for (n = 0; n < buffer_size; n++) {
+        if(((buffer->ptrs)[n])==1){
+            if((((buffer->buffer)[n]).requesting_client)==client_id){
+                (buffer->ptrs)[n] = 0;
+                *op = (buffer->buffer)[n];
                 return;
             }
         }
