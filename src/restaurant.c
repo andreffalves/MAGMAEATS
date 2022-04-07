@@ -15,20 +15,22 @@
 
 int execute_restaurant(int rest_id, struct communication_buffers* buffers, struct main_data* data){
     int ops = 0;
+    int* ptr = &ops;
     int terminate_flag = *(data->terminate);
     struct operation* op = create_dynamic_memory(sizeof (struct operation));
     while (1){
         terminate_flag = *(data->terminate);
         if(terminate_flag == 1) {
             destroy_dynamic_memory(op);
-            return ops;
+            return *ptr;
         }
         else {
             memset(op,0,sizeof (struct operation));
             op->id=-1;
             restaurant_receive_operation(op, rest_id, buffers, data);
-            if(op->id != -1){
-                restaurant_process_operation(op, rest_id, data, &ops);
+
+            if((op->id) != (-1)){
+                restaurant_process_operation(op, rest_id, data, ptr);
                 restaurant_forward_operation(op, buffers, data);
             }
         }  
@@ -46,7 +48,7 @@ void restaurant_receive_operation(struct operation* op, int rest_id, struct comm
 }
 
 void restaurant_process_operation(struct operation* op, int rest_id, struct main_data* data, int* counter){
-    printf("O restaurante recebeu o pedido!");
+    printf("O restaurante recebeu o pedido!\n");
     op->receiving_rest = rest_id;
     op->status = 'R';
     (*counter)++;
@@ -54,5 +56,5 @@ void restaurant_process_operation(struct operation* op, int rest_id, struct main
 }
 
 void restaurant_forward_operation(struct operation* op, struct communication_buffers* buffers, struct main_data* data){
-    write_rest_driver_buffer(buffers->rest_driv, data->max_ops, op);
+    write_rest_driver_buffer(buffers->rest_driv, data->buffers_size, op);
 }

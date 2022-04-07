@@ -74,19 +74,33 @@ void destroy_shared_memory(char* name, void* ptr, int size){
 
 
 void write_main_rest_buffer(struct rnd_access_buffer* buffer, int buffer_size, struct operation* op){
-    int* arr_free = buffer->ptrs;
-    struct operation* arr_ops = buffer->buffer;
+    struct operation next_produced = *op;
+    int n;
     while (1){
-        for (int i = 0; i < buffer_size; ++i) {
-            if(arr_free[i]==0){
-                arr_ops[i]= *op;
-                arr_free[i]=1;
+        for(n=0;n<buffer_size;n++){
+            if(((buffer->ptrs)[n])==0){
+                ((buffer->ptrs)[n])=1;
+                ((buffer->buffer)[n])=next_produced;
                 return;
             }
         }
     }
 }
 
+
+void read_main_rest_buffer(struct rnd_access_buffer* buffer, int rest_id, int buffer_size, struct operation* op){
+    int n;
+    for (n = 0; n < buffer_size; n++) {
+        if(((buffer->ptrs)[n])==1){
+            if((((buffer->buffer)[n]).requested_rest)==rest_id) {
+                (buffer->ptrs)[n] = 0;
+                *op = (buffer->buffer)[n];
+                return;
+            }
+        }
+    }
+    op->id=-1;
+}
 
 void write_rest_driver_buffer(struct circular_buffer* buffer, int buffer_size, struct operation* op){
     struct pointers *ptr = buffer->ptrs;
@@ -117,22 +131,6 @@ void write_driver_client_buffer(struct rnd_access_buffer* buffer, int buffer_siz
     }
 }
 
-
-void read_main_rest_buffer(struct rnd_access_buffer* buffer, int rest_id, int buffer_size, struct operation* op){
-    int* ptrs = buffer->ptrs;
-    struct operation* arr_ops = buffer->buffer;
-    for (int i = 0; i < buffer_size; ++i) {
-        if(ptrs[i]==1){
-            int op_rest_id =  arr_ops[i].requested_rest;
-            if(op_rest_id==rest_id){
-                op = &arr_ops[i];
-                ptrs[i]=0;
-                return;
-            }
-        }
-    }
-    op->id=-1;
-}
 
 
 void read_rest_driver_buffer(struct circular_buffer* buffer, int buffer_size, struct operation* op){
