@@ -106,23 +106,24 @@ void write_rest_driver_buffer(struct circular_buffer* buffer, int buffer_size, s
     struct operation next_produced = *op;
     struct pointers *ptr = buffer->ptrs;
     struct operation* arr_ops = buffer->buffer;
-    while(((ptr->in)+1)%buffer_size==(ptr->out)){}
+    int* in = &(ptr->in);
+    int* out = &(ptr->out);
+    while(((*in)+1)%buffer_size==(*out)){}
     arr_ops[ptr->in] = next_produced;
-    ptr->in = (ptr->in+1)%buffer_size;
+    ptr->in = ((*in)+1)%buffer_size;
 }
 
 
 void read_rest_driver_buffer(struct circular_buffer* buffer, int buffer_size, struct operation* op){
     struct pointers *ptr = buffer->ptrs;
     struct operation* ops = buffer->buffer;
-    int in = ptr->in;
-    int out = ptr->out;
-    if(in==out){
+    int* in = &(ptr->in);
+    int* out = &(ptr->out);
+    if((*in)==(*out)){
         op->id=-1;
     } else{
-        *op = ops[out];
-        ops[out].id = -1;
-        (ptr->out)= (out+1)%buffer_size;
+        *op = ops[*out];
+        *out= (*out+1)%buffer_size;
     }
 }
 
