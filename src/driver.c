@@ -19,7 +19,7 @@ int execute_driver(int driver_id, struct communication_buffers* buffers, struct 
             memset(op,0,sizeof (struct operation));
             op->id=-1;
             driver_receive_operation(op, buffers, data);
-            if((op->id != -1)&&(op->status=='R')){
+            if(op->id != -1){
                 driver_process_operation(op, driver_id, data, ptr);
                 driver_send_answer(op, buffers, data);
             }
