@@ -161,29 +161,28 @@ void read_status(struct main_data* data){
         return;
     }
     struct operation temp_op = data->results[temp];
-    if(temp_op.requested_dish==NULL){
-        printf("Pedido %d ainda não é váldio!\n",temp);
-    }
-    else{
-        switch (temp_op.status) {
-            case 'I':
-                printf("Pedido %d com estado %c requisitado pelo cliente %d ao restaurante %d com o prato %s, ainda não foi recebido no restaurante!\n",
-                       temp_op.id,temp_op.status,temp_op.requesting_client,temp_op.requested_rest,temp_op.requested_dish);
-                break;
-            case 'R':
-                printf("Pedido %d com estado %c requisitado pelo cliente %d ao restaurante %d com o prato %s,foi recebido pelo restaurant %d ainda não foi levantado por um motorista!\n",
-                       temp_op.id,temp_op.status,temp_op.requesting_client,temp_op.requested_rest,temp_op.requested_dish,temp_op.receiving_rest);
-                break;
-            case 'D':
-                printf("Pedido %d com estado %c requisitado pelo cliente %d ao restaurante %d com o prato %s, foi levantado por o motorista %d e ainda não foi entrege ao cliente%d!\n",
-                       temp_op.id,temp_op.status,temp_op.requesting_client,temp_op.requested_rest,temp_op.requested_dish,temp_op.receiving_driver,temp_op.requesting_client);
-                break;
-            case 'C':
-                //unit
-                printf("Pedido %d com estado %c requisitado pelo cliente %d ao restaurante %d com o prato %s, foi tratado pelo restaurante %d, encaminhado pelo motorista %d, e enviado ao cliente %d!\n",
-                       temp_op.id,temp_op.status,temp_op.requesting_client,temp_op.requested_rest,temp_op.requested_dish,temp_op.receiving_rest,temp_op.receiving_driver,temp_op.receiving_client);
-                break;
-        }
+    switch (temp_op.status) {
+        case 'I':
+            printf("Pedido %d com estado %c requisitado pelo cliente %d ao restaurante %d com o prato %s, ainda não foi recebido no restaurante!\n",
+                   temp_op.id,temp_op.status,temp_op.requesting_client,temp_op.requested_rest,temp_op.requested_dish);
+            break;
+        case 'R':
+            printf("Pedido %d com estado %c requisitado pelo cliente %d ao restaurante %d com o prato %s,foi recebido pelo restaurant %d ainda não foi levantado por um motorista!\n",
+                   temp_op.id,temp_op.status,temp_op.requesting_client,temp_op.requested_rest,temp_op.requested_dish,temp_op.receiving_rest);
+            break;
+        case 'D':
+            printf("Pedido %d com estado %c requisitado pelo cliente %d ao restaurante %d com o prato %s, foi levantado por o motorista %d e ainda não foi entrege ao cliente%d!\n",
+                   temp_op.id,temp_op.status,temp_op.requesting_client,temp_op.requested_rest,temp_op.requested_dish,temp_op.receiving_driver,temp_op.requesting_client);
+            break;
+        case 'C':
+            //
+            printf("Pedido %d com estado %c requisitado pelo cliente %d ao restaurante %d com o prato %s, foi tratado pelo restaurante %d, encaminhado pelo motorista %d, e enviado ao cliente %d!\n",
+                   temp_op.id,temp_op.status,temp_op.requesting_client,temp_op.requested_rest,temp_op.requested_dish,temp_op.receiving_rest,temp_op.receiving_driver,temp_op.receiving_client);
+            break;
+        default:
+            printf("Pedido %d ainda não é váldio!\n",temp);
+            break;
+
     }
 }
 
