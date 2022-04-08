@@ -117,13 +117,13 @@ void write_rest_driver_buffer(struct circular_buffer* buffer, int buffer_size, s
 void read_rest_driver_buffer(struct circular_buffer* buffer, int buffer_size, struct operation* op){
     struct pointers *ptr = buffer->ptrs;
     struct operation* ops = buffer->buffer;
-    int* in = &(ptr->in);
-    int* out = &(ptr->out);
-    if((*in)==(*out)){
+    int in = ptr->in;
+    int out = ptr->out;
+    if(in==out){
         op->id=-1;
     } else{
-        *op = ops[*out];
-        *out= (*out+1)%buffer_size;
+        *op = ops[out];
+        ptr->out= (out+1)%buffer_size;
     }
 }
 

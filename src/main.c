@@ -151,6 +151,7 @@ void read_status(struct main_data* data){
     scanf("%d",&temp);
     if((temp==-1)|(temp>data->max_ops)){
         printf("id de pedido fornecido é inválido!\n");
+        return;
     }
     struct operation temp_op = data->results[temp];
     if(temp_op.requested_dish==NULL){

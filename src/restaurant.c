@@ -17,21 +17,18 @@ int execute_restaurant(int rest_id, struct communication_buffers* buffers, struc
     int ops = 0;
     int* ptr = &ops;
     int terminate_flag = *(data->terminate);
-    struct operation* op = create_dynamic_memory(sizeof (struct operation));
     while (1){
         terminate_flag = *(data->terminate);
         if(terminate_flag == 1) {
-            destroy_dynamic_memory(op);
             return *ptr;
         }
         else {
-            memset(op,0,sizeof (struct operation));
-            op->id=-1;
-            restaurant_receive_operation(op, rest_id, buffers, data);
+            struct operation op;
+            restaurant_receive_operation(&op, rest_id, buffers, data);
 
-            if((op->id) != (-1)){
-                restaurant_process_operation(op, rest_id, data, ptr);
-                restaurant_forward_operation(op, buffers, data);
+            if((op.id) != (-1)){
+                restaurant_process_operation(&op, rest_id, data, ptr);
+                restaurant_forward_operation(&op, buffers, data);
             }
         }  
     }
