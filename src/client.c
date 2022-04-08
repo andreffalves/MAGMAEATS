@@ -43,8 +43,7 @@ void client_get_operation(struct operation* op, int client_id, struct communicat
 
 void client_process_operation(struct operation* op, int client_id, struct main_data* data, int* counter){
     printf("O cliente recebeu o pedido!\n");
-    op->receiving_client = client_id;
-    op->status = 'C';
+    data->results[op->id].receiving_client = client_id;
+    data->results[op->id].status = 'C';
     (*counter)++;
-    data->results[op->id] = *op;
 }

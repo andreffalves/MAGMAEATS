@@ -44,10 +44,9 @@ void driver_receive_operation(struct operation* op, struct communication_buffers
 
 void driver_process_operation(struct operation* op, int driver_id, struct main_data* data, int* counter){
     printf("O condutor recebeu o pedido!\n");
-    op->receiving_driver = driver_id;
-    op->status = 'D';
+    data->results[op->id].receiving_driver = driver_id;
+    data->results[op->id].status = 'D';
     (*counter)++;
-    data->results[op->id] = *op;
 }
 
 void driver_send_answer(struct operation* op, struct communication_buffers* buffers, struct main_data* data){
