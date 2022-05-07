@@ -14,40 +14,40 @@ Rodrigo Antunes    | FC56321
 #include "driver.h"
 #include "restaurant.h"
 
-int launch_restaurant(int restaurant_id, struct communication_buffers* buffers, struct main_data* data){
+int launch_restaurant(int restaurant_id, struct communication_buffers* buffers, struct main_data* data, struct semaphores* sems){
     int pid = fork();
     if(pid<0){
         perror("launch_restaurant");
         exit(1);
     }
     else if(pid==0){
-        int ret = execute_restaurant(restaurant_id, buffers, data);
+        int ret = execute_restaurant(restaurant_id, buffers, data, sems);
         exit(ret);
     }
     return pid;
 }
 
-int launch_driver(int restaurant_id, struct communication_buffers* buffers, struct main_data* data){
+int launch_driver(int restaurant_id, struct communication_buffers* buffers, struct main_data* data, struct semaphores* sems){
     int pid = fork();
     if(pid<0){
         perror("launch_restaurant");
         exit(1);
     }
     else if(pid==0){
-        int ret = execute_driver(restaurant_id, buffers, data);
+        int ret = execute_driver(restaurant_id, buffers, data, sems);
         exit(ret);
     }
     return pid;
 }
 
-int launch_client(int restaurant_id, struct communication_buffers* buffers, struct main_data* data){
+int launch_client(int restaurant_id, struct communication_buffers* buffers, struct main_data* data, struct semaphores* sems){
     int pid = fork();
     if(pid<0){
         perror("launch_restaurant");
         exit(1);
     }
     else if(pid==0){
-        int ret = execute_client(restaurant_id, buffers, data);
+        int ret = execute_client(restaurant_id, buffers, data, sems);
         exit(ret);
     }
     return pid;
