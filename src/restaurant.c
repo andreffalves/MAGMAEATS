@@ -32,9 +32,6 @@ int execute_restaurant(int rest_id, struct communication_buffers* buffers, struc
                 restaurant_process_operation(&op, rest_id, data, ptr,sems);
                 restaurant_forward_operation(&op, buffers, data,sems);
             }
-            else{
-                produce_end(sems->main_rest);
-            }
         }  
     }
 }
@@ -46,11 +43,15 @@ void restaurant_receive_operation(struct operation* op, int rest_id, struct comm
         } else{
             consume_begin(sems->main_rest);
             read_main_rest_buffer(buffers->main_rest, rest_id, data->max_ops, op);
-            if((op->id)!=-1){
+            if((op->id)!=-1) {
                 consume_end(sems->main_rest);
             }
             else{
                 produce_end(sems->main_rest);
+                /*codigo equivalente
+                sem_post(sems->main_rest->mutex);
+                sem_post(sems->main_rest->full);
+                 */
             }
 
         }

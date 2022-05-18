@@ -81,7 +81,7 @@ void create_dynamic_memory_buffers(struct main_data* data){
     data->driver_pids = create_dynamic_memory(sizeof(int) * data->n_drivers);
     data->client_pids = create_dynamic_memory(sizeof(int) * data->n_clients);
 
-    data->restaurant_stats = malloc(sizeof(int) * data->n_restaurants);
+    data->restaurant_stats = create_dynamic_memory(sizeof(int) * data->n_restaurants);
     data->driver_stats = create_dynamic_memory(sizeof(int) * data->n_drivers);
     data->client_stats = create_dynamic_memory(sizeof(int) * data->n_clients);
 }
@@ -286,8 +286,7 @@ void create_request(int* op_counter, struct communication_buffers* buffers, stru
         printf("O número máximo de pedidos foi alcançado!\n");
     }
     else{
-        //unit by heap
-        struct operation* dummy = malloc(sizeof (struct operation));
+        struct operation* dummy = create_dynamic_memory(sizeof (struct operation));
         dummy->id=*op_counter;
         dummy->requested_rest=rest;
         dummy->requesting_client=client;
@@ -303,7 +302,7 @@ void create_request(int* op_counter, struct communication_buffers* buffers, stru
         produce_end(sems->main_rest);
         printf("Pedido #%d foi criado!\n",dummy->id);
 
-        free(dummy);
+        destroy_dynamic_memory(dummy);
     }
 }
 
