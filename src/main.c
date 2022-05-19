@@ -12,6 +12,8 @@ Rodrigo Antunes    | FC56321
 #include "process.h"
 #include <semaphore.h>
 #include "metime.h"
+#include "configuration.h"
+
 
 struct main_data* data;
 struct communication_buffers* buffers;
@@ -58,17 +60,18 @@ int main(int argc, char *argv[]) {
 
 
 void main_args(int argc, char* argv[], struct main_data* data){
-    if(argc!=6){
+    if(argc!=2){
         perror("Uso: magnaeats max_ops buffers_size n_restaurants n_drivers n_clients\n"
-               "Exemplo: ./bin/magnaeats 10 10 1 1 1\n");
+               "Exemplo: ./bin/magnaeats config.txt \n");
         exit(1);
     }
-    int max_ops = atoi(argv[1]);			//número máximo de operações
-    int buffers_size = atoi(argv[2]);		//tamanho máximo dos buffers de mem. partilhada
+    char* configFileName = argv[1];
+    int max_ops = getMaxOps(configFileName);			//número máximo de operações
+    int buffers_size = getBufferSize(configFileName);		//tamanho máximo dos buffers de mem. partilhada
 
-    int n_restaurants = atoi(argv[3]);		//número de restaurantes
-    int n_drivers = atoi(argv[4]);			//número de motoristas
-    int n_clients = atoi(argv[5]);
+    int n_restaurants = getNumRests(configFileName);		//número de restaurantes
+    int n_drivers = getNumDrivers(configFileName);			//número de motoristas
+    int n_clients = getNumClients(configFileName);
     if(max_ops==0||buffers_size==0||n_restaurants==0||n_drivers==0||n_clients==0){
         perror("Parâmetros incorretos! Exemplo de uso: ./bin/magnaeats 10 10 1 1 1");
         exit(2);

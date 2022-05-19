@@ -8,10 +8,15 @@ int getMaxOps(char* configFileName){
     char line[MAXLINE];
     FILE *fp;
     fp = fopen(configFileName,"r");
+    if(fp==NULL){
+        perror("ficheiro não existe\n");
+        exit(1);
+    }
     if(ferror(fp)){
         perror("config file");
         exit(1);
     }
+
     fgets(line,MAXLINE,fp);
     int ops = atoi(line);
     fclose(fp);
@@ -22,6 +27,10 @@ int getBufferSize(char* configFileName){
     char line[MAXLINE];
     FILE *fp;
     fp = fopen(configFileName,"r");
+    if(fp==NULL){
+        perror("ficheiro não existe\n");
+        exit(1);
+    }
     if(ferror(fp)){
         perror("config file");
         exit(1);
@@ -39,6 +48,10 @@ int getNumRests(char* configFileName){
     char line[MAXLINE];
     FILE *fp;
     fp = fopen(configFileName,"r");
+    if(fp==NULL){
+        perror("ficheiro não existe\n");
+        exit(1);
+    }
     if(ferror(fp)){
         perror("config file");
         exit(1);
@@ -56,6 +69,10 @@ int getNumDrivers(char* configFileName){
     char line[MAXLINE];
     FILE *fp;
     fp = fopen(configFileName,"r");
+    if(fp==NULL){
+        perror("ficheiro não existe\n");
+        exit(1);
+    }
     if(ferror(fp)){
         perror("config file");
         exit(1);
@@ -72,6 +89,10 @@ int getNumClients(char* configFileName){
     char line[MAXLINE];
     FILE *fp;
     fp = fopen(configFileName,"r");
+    if(fp==NULL){
+        perror("ficheiro não existe\n");
+        exit(1);
+    }
     if(ferror(fp)){
         perror("config file");
         exit(1);
@@ -89,6 +110,10 @@ FILE * getLogFile(char* configFileName){
     char line[MAXLINE];
     FILE *fp;
     fp = fopen(configFileName,"r");
+    if(fp==NULL){
+        perror("ficheiro não existe\n");
+        exit(1);
+    }
     if(ferror(fp)){
         perror("config file");
         exit(1);
@@ -111,6 +136,10 @@ char* getStatsFileName(char* configFileName){
     char* line = create_dynamic_memory(MAXLINE*sizeof(char));//destroy when stop
     FILE *fp;
     fp = fopen(configFileName,"r");
+    if(fp==NULL){
+        perror("ficheiro não existe\n");
+        exit(1);
+    }
     if(ferror(fp)){
         perror("config file");
         exit(1);
@@ -128,6 +157,10 @@ int getAlarmTime(char* configFileName){
     char line[MAXLINE];
     FILE *fp;
     fp = fopen(configFileName,"r");
+    if(fp==NULL){
+        perror("ficheiro não existe\n");
+        exit(1);
+    }
     if(ferror(fp)){
         perror("config file");
         exit(1);
