@@ -2,10 +2,16 @@
 #include <main.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <unistd.h>
+#include <sys/time.h>
+
+
 
 extern struct main_data* data;
 extern struct communication_buffers* buffers;
 extern struct semaphores* sems;
+
+
 
 void ignoreHandler(int sig){
     //DO NOTHING
@@ -36,3 +42,25 @@ void stopMain(){
         exit(-1);
     }
 }
+
+void timerHandler(int sig){
+    printf("ola\n");
+}
+
+void setTimer(int secs){
+    struct sigaction sa;
+    sa.sa_handler = timerHandler;
+    sa.sa_flags = 0;
+    if (sigaction(SIGALRM, &sa, NULL) == -1) {
+        perror("Alarm Signal:");
+        exit(-1);
+    }
+    struct itimerval val;
+    val.it_interval.tv_sec = secs;
+    val.it_interval.tv_usec = 0;
+    val.it_value.tv_sec = secs;
+    val.it_value.tv_usec = 0;
+    setitimer(ITIMER_REAL, &val, 0);
+}
+
+

@@ -19,6 +19,7 @@ Rodrigo Antunes    | FC56321
 struct main_data* data;
 struct communication_buffers* buffers;
 struct semaphores* sems;
+int term;
 
 //extern FILE *logFile;
 //extern char* statsFileName;
@@ -92,7 +93,7 @@ void main_args(int argc, char* argv[], struct main_data* data){
     data->n_drivers = n_drivers;
     data->n_clients =n_clients;
 
-    //setAlarmTime(alarmTime);
+    setTimer(alarmTime);
 }
 
 
@@ -131,6 +132,7 @@ void launch_processes(struct communication_buffers* buffers, struct main_data* d
 
 
 void user_interaction(struct communication_buffers* buffers, struct main_data* data, struct semaphores* sems){
+    printf("teste1\n");
     char buffer[50];
     int op_counter = 0;
     printf("Ações disponíveis:\n"
@@ -138,9 +140,11 @@ void user_interaction(struct communication_buffers* buffers, struct main_data* d
            "        status id - consultar o estado de um pedido\n"
            "        stop - termina a execução do magnaeats.\n"
            "        help - imprime informação sobre as ações disponíveis.\n");
-    printf("Introduzir ação:\n");
     while (1){
-
+        if(term== 1) {
+            return;
+        }
+        printf("Introduzir ação:\n");
         scanf("%s",buffer);
         if(strcmp(buffer,"help")==0){
             printf("Ações disponíveis:\n"
@@ -163,7 +167,6 @@ void user_interaction(struct communication_buffers* buffers, struct main_data* d
         else{
             printf("Ação não reconhecida, insira 'help' para assistência.\n");
         }
-        printf("Introduzir ação:\n");
 
     }
 }
@@ -237,6 +240,7 @@ void wait_processes(struct main_data* data){
 
 void stop_execution(struct main_data* data, struct communication_buffers* buffers, struct semaphores* sems){
     *(data->terminate)=1;
+    term = 1;
     wakeup_processes(data,sems);
     wait_processes(data);
     write_statistics(data);
