@@ -1,3 +1,10 @@
 #include <stdio.h>
+ FILE *logFile;
 
-static FILE *logFile;
+void logHelp(){
+    fputs("help", logFile);
+}
+
+void closeLog(){
+    fclose(logFile);
+}

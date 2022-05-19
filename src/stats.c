@@ -1,2 +1,2 @@
-static char* statsFileName;
+char* statsFileName;
 

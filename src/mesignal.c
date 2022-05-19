@@ -44,7 +44,6 @@ void stopMain(){
 }
 
 void timerHandler(int sig){
-    printf("ola\n");
 }
 
 void setTimer(int secs){

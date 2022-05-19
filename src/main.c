@@ -15,10 +15,15 @@ Rodrigo Antunes    | FC56321
 #include "configuration.h"
 #include "mesignal.h"
 #include <signal.h>
+#include "log.h"
+
 
 struct main_data* data;
 struct communication_buffers* buffers;
 struct semaphores* sems;
+
+extern FILE *logFile;
+extern char* statsFileName;
 int term;
 
 //extern FILE *logFile;
@@ -79,7 +84,7 @@ void main_args(int argc, char* argv[], struct main_data* data){
     int n_restaurants = getNumRests(configFileName);		//número de restaurantes
     int n_drivers = getNumDrivers(configFileName);			//número de motoristas
     int n_clients = getNumClients(configFileName);
-    //logFile = getLogFile(configFileName);
+    logFile = getLogFile(configFileName);
     //statsFileName = getStatsFileName(configFileName);
     int alarmTime = getAlarmTime(configFileName);
     if(max_ops==0||buffers_size==0||n_restaurants==0||n_drivers==0||n_clients==0||alarmTime==0){
@@ -132,7 +137,6 @@ void launch_processes(struct communication_buffers* buffers, struct main_data* d
 
 
 void user_interaction(struct communication_buffers* buffers, struct main_data* data, struct semaphores* sems){
-    printf("teste1\n");
     char buffer[50];
     int op_counter = 0;
     printf("Ações disponíveis:\n"
@@ -147,6 +151,7 @@ void user_interaction(struct communication_buffers* buffers, struct main_data* d
         printf("Introduzir ação:\n");
         scanf("%s",buffer);
         if(strcmp(buffer,"help")==0){
+            logHelp();
             printf("Ações disponíveis:\n"
                    "        request client restaurant dish - criar um novo pedido\n"
                    "        status id - consultar o estado de um pedido\n"
@@ -241,6 +246,7 @@ void wait_processes(struct main_data* data){
 void stop_execution(struct main_data* data, struct communication_buffers* buffers, struct semaphores* sems){
     *(data->terminate)=1;
     term = 1;
+    closeLog();
     wakeup_processes(data,sems);
     wait_processes(data);
     write_statistics(data);
