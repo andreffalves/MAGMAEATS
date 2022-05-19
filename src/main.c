@@ -72,7 +72,10 @@ void main_args(int argc, char* argv[], struct main_data* data){
     int n_restaurants = getNumRests(configFileName);		//número de restaurantes
     int n_drivers = getNumDrivers(configFileName);			//número de motoristas
     int n_clients = getNumClients(configFileName);
-    if(max_ops==0||buffers_size==0||n_restaurants==0||n_drivers==0||n_clients==0){
+    extern logFile = getLogFile(configFileName);
+    extern statsFileName = getStatsFileName(configFileName);
+    int alarmTime = getAlarmTime(configFileName);
+    if(max_ops==0||buffers_size==0||n_restaurants==0||n_drivers==0||n_clients==0||alarmTime==0){
         perror("Parâmetros incorretos! Exemplo de uso: ./bin/magnaeats 10 10 1 1 1");
         exit(2);
     }
@@ -82,6 +85,8 @@ void main_args(int argc, char* argv[], struct main_data* data){
     data->n_restaurants = n_restaurants;
     data->n_drivers = n_drivers;
     data->n_clients =n_clients;
+
+    //setAlarmTime(alarmTime);
 }
 
 
