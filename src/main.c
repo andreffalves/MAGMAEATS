@@ -12,12 +12,17 @@ Rodrigo Antunes    | FC56321
 #include "process.h"
 #include <semaphore.h>
 
+struct main_data* data;
+struct communication_buffers* buffers;
+struct semaphores* sems;
+
 int main(int argc, char *argv[]) {
 //init data structures
-    struct main_data* data = create_dynamic_memory(sizeof(struct
+     data = create_dynamic_memory(sizeof(struct
             main_data));
-    struct communication_buffers* buffers =
-            create_dynamic_memory(sizeof(struct communication_buffers));
+
+    buffers = create_dynamic_memory(sizeof(struct communication_buffers));
+
     buffers->main_rest = create_dynamic_memory(sizeof(struct
             rnd_access_buffer));
     buffers->rest_driv = create_dynamic_memory(sizeof(struct
@@ -25,8 +30,8 @@ int main(int argc, char *argv[]) {
     buffers->driv_cli = create_dynamic_memory(sizeof(struct
             rnd_access_buffer));
 // init semaphore data structure
-    struct semaphores* sems = create_dynamic_memory(sizeof(struct
-            semaphores));
+    sems = create_dynamic_memory(sizeof(struct semaphores));
+
     sems->main_rest = create_dynamic_memory(sizeof(struct prodcons));
     sems->rest_driv = create_dynamic_memory(sizeof(struct prodcons));
     sems->driv_cli = create_dynamic_memory(sizeof(struct prodcons));
