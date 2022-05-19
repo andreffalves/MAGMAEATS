@@ -17,10 +17,10 @@ int getNumDrivers(char* configFileName);
 int getNumClients(char* configFileName);
 
 
-FILE getLogFile(char* configFileName);
+FILE * getLogFile(char* configFileName);
 
 
-FILE getStatsFile(char* configFileName);
+char* getStatsFileName(char* configFileName);
 
 
 int getAlarmTime(char* configFileName);

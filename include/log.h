@@ -9,5 +9,7 @@ void logStop();
 
 void logStatus(int resquestNum);
 
+void closeLog();
+
 
 #endif
