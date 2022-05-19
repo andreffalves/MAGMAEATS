@@ -10,6 +10,7 @@ Rodrigo Antunes    | FC56321
 #include "memory.h"
 #include "main.h"
 #include "client.h"
+#include "metime.h"
 
 int execute_client(int client_id, struct communication_buffers* buffers, struct main_data* data, struct semaphores* sems){
     int ops = 0;
@@ -54,5 +55,6 @@ void client_process_operation(struct operation* op, int client_id, struct main_d
     data->results[op->id].receiving_client = client_id;
     data->results[op->id].status = 'C';
     semaphore_mutex_unlock(sems->results_mutex);
+    op->client_end_time=getCurrentTime();
     (*counter)++;
 }

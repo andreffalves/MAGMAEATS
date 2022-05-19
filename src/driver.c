@@ -10,6 +10,7 @@ Rodrigo Antunes    | FC56321
 #include "memory.h"
 #include "main.h"
 #include "driver.h"
+#include "metime.h"
 
 
 int execute_driver(int driver_id, struct communication_buffers* buffers, struct main_data* data, struct semaphores* sems){
@@ -42,6 +43,7 @@ void driver_receive_operation(struct operation* op, struct communication_buffers
         read_rest_driver_buffer(buffers->rest_driv, data->buffers_size, op);
         if(op->id!=-1){
             consume_end(sems->rest_driv);
+            op->driver_time=getCurrentTime();
         }
         else{
             produce_end(sems->rest_driv);

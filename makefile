@@ -1,5 +1,5 @@
 OBJ_dir = obj
-OBJECTOS = client.o driver.o main.o memory.o process.o restaurant.o synchronization.o
+OBJECTOS = client.o driver.o main.o memory.o process.o restaurant.o synchronization.o metime.o
 CC = gcc
 LIBS = -lrt -lpthread
 CFLAGS = -Wall -g -O0 -I include -o

@@ -11,6 +11,7 @@ Rodrigo Antunes    | FC56321
 #include "main.h"
 #include "process.h"
 #include <semaphore.h>
+#include "metime.h"
 
 struct main_data* data;
 struct communication_buffers* buffers;
@@ -298,6 +299,7 @@ void create_request(int* op_counter, struct communication_buffers* buffers, stru
         dummy->requested_dish = dish;
 
         dummy->status = 'I';
+        dummy->start_time = getCurrentTime();
         semaphore_mutex_lock(sems->results_mutex);
         data->results[dummy->id] = *dummy;
         semaphore_mutex_unlock(sems->results_mutex);

@@ -10,6 +10,7 @@ Rodrigo Antunes    | FC56321
 #include "main.h"
 #include "memory.h"
 #include "restaurant.h"
+#include "metime.h"
 
 
 #include <semaphore.h>
@@ -45,6 +46,7 @@ void restaurant_receive_operation(struct operation* op, int rest_id, struct comm
             read_main_rest_buffer(buffers->main_rest, rest_id, data->max_ops, op);
             if((op->id)!=-1) {
                 consume_end(sems->main_rest);
+                op->rest_time=getCurrentTime();
             }
             else{
                 produce_end(sems->main_rest);
