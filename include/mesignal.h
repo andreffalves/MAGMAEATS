@@ -7,7 +7,7 @@
 /*Função que define o comportamento de um processo a um sinal para apenas ignorar esse sinal
  *
  */
-void ignoreSignal(int sig);
+void ignoreSignal();
 
 /*
  * Handler chamado pela função ignoreSignal
@@ -19,12 +19,12 @@ void ignoreHandler(int sig);
  *Função que define o comportamento de um processo a um sinal para chamar a função stop implementada
  *
  */
-void stopMain(int sig);
+void stopMain();
 
 /*
  * Handler chamado pela função stopMain
  */
-void stopMainHandler(int sig):
+void stopMainHandler(int sig);
 
 /*
  *Função que define qual deve ser o intervalo de tempo para o alarme

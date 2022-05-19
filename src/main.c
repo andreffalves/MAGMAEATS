@@ -13,13 +13,19 @@ Rodrigo Antunes    | FC56321
 #include <semaphore.h>
 #include "metime.h"
 #include "configuration.h"
-
+#include "mesignal.h"
+#include <signal.h>
 
 struct main_data* data;
 struct communication_buffers* buffers;
 struct semaphores* sems;
 
+//extern FILE *logFile;
+//extern char* statsFileName;
+
+
 int main(int argc, char *argv[]) {
+    stopMain();
 //init data structures
      data = create_dynamic_memory(sizeof(struct
             main_data));
@@ -72,8 +78,8 @@ void main_args(int argc, char* argv[], struct main_data* data){
     int n_restaurants = getNumRests(configFileName);		//número de restaurantes
     int n_drivers = getNumDrivers(configFileName);			//número de motoristas
     int n_clients = getNumClients(configFileName);
-    extern logFile = getLogFile(configFileName);
-    extern statsFileName = getStatsFileName(configFileName);
+    //logFile = getLogFile(configFileName);
+    //statsFileName = getStatsFileName(configFileName);
     int alarmTime = getAlarmTime(configFileName);
     if(max_ops==0||buffers_size==0||n_restaurants==0||n_drivers==0||n_clients==0||alarmTime==0){
         perror("Parâmetros incorretos! Exemplo de uso: ./bin/magnaeats 10 10 1 1 1");

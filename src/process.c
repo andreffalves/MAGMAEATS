@@ -13,6 +13,7 @@ Rodrigo Antunes    | FC56321
 #include "client.h"
 #include "driver.h"
 #include "restaurant.h"
+#include "mesignal.h"
 
 int launch_restaurant(int restaurant_id, struct communication_buffers* buffers, struct main_data* data, struct semaphores* sems){
     int pid = fork();
@@ -21,6 +22,7 @@ int launch_restaurant(int restaurant_id, struct communication_buffers* buffers, 
         exit(1);
     }
     else if(pid==0){
+        ignoreSignal();
         int ret = execute_restaurant(restaurant_id, buffers, data, sems);
         exit(ret);
     }
@@ -34,6 +36,7 @@ int launch_driver(int restaurant_id, struct communication_buffers* buffers, stru
         exit(1);
     }
     else if(pid==0){
+        ignoreSignal();
         int ret = execute_driver(restaurant_id, buffers, data, sems);
         exit(ret);
     }
@@ -47,6 +50,7 @@ int launch_client(int restaurant_id, struct communication_buffers* buffers, stru
         exit(1);
     }
     else if(pid==0){
+        ignoreSignal();
         int ret = execute_client(restaurant_id, buffers, data, sems);
         exit(ret);
     }

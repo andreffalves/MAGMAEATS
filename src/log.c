@@ -1,3 +1,3 @@
 #include <stdio.h>
 
-FILE *logFile;
+static FILE *logFile;
