@@ -59,7 +59,6 @@ int launch_client(int restaurant_id, struct communication_buffers* buffers, stru
 
 int wait_process(int process_id){
     int stat, ret;
-    //dava-me erro por isso coloquei 0 nas options
     waitpid(process_id,&stat,0);
     if(WIFEXITED(stat)){
         ret = WEXITSTATUS(stat);
