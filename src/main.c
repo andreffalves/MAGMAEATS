@@ -31,7 +31,7 @@ int term;
 
 
 int main(int argc, char *argv[]) {
-    stopMain();
+    //stopMain();
 //init data structures
      data = create_dynamic_memory(sizeof(struct
             main_data));
@@ -85,7 +85,7 @@ void main_args(int argc, char* argv[], struct main_data* data){
     int n_drivers = getNumDrivers(configFileName);			//número de motoristas
     int n_clients = getNumClients(configFileName);
     logFile = getLogFile(configFileName);
-    //statsFileName = getStatsFileName(configFileName);
+    statsFileName = getStatsFileName(configFileName);
     int alarmTime = getAlarmTime(configFileName);
     if(max_ops==0||buffers_size==0||n_restaurants==0||n_drivers==0||n_clients==0||alarmTime==0){
         perror("Parâmetros incorretos! Exemplo de uso: ./bin/magnaeats 10 10 1 1 1");
@@ -98,7 +98,7 @@ void main_args(int argc, char* argv[], struct main_data* data){
     data->n_drivers = n_drivers;
     data->n_clients =n_clients;
 
-    setTimer(alarmTime);
+    //setTimer(alarmTime);
 }
 
 
@@ -166,6 +166,7 @@ void user_interaction(struct communication_buffers* buffers, struct main_data* d
             op_counter++;
         }
         else if (strcmp(buffer,"stop")==0){
+            logStop();
             stop_execution(data,buffers,sems);
             return;
         }
@@ -199,6 +200,7 @@ void create_shared_memory_buffers(struct main_data* data, struct communication_b
 void read_status(struct main_data* data, struct semaphores* sems){
     int temp = -1;
     scanf("%d",&temp);
+    logStatus(temp);
     if((temp==-1)|(temp>data->max_ops)){
         printf("id de pedido fornecido é inválido!\n");
         return;
@@ -317,6 +319,7 @@ void create_request(int* op_counter, struct communication_buffers* buffers, stru
     }
     else{
         struct operation* dummy = create_dynamic_memory(sizeof (struct operation));
+        logRequest(rest,client,dish);
         dummy->id=*op_counter;
         dummy->requested_rest=rest;
         dummy->requesting_client=client;
