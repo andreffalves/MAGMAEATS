@@ -46,7 +46,6 @@ void restaurant_receive_operation(struct operation* op, int rest_id, struct comm
             read_main_rest_buffer(buffers->main_rest, rest_id, data->max_ops, op);
             if((op->id)!=-1) {
                 consume_end(sems->main_rest);
-                op->rest_time=getCurrentTime();
             }
             else{
                 produce_end(sems->main_rest);
@@ -62,6 +61,7 @@ void restaurant_receive_operation(struct operation* op, int rest_id, struct comm
 void restaurant_process_operation(struct operation* op, int rest_id, struct main_data* data, int* counter, struct semaphores* sems){
     printf("O restaurante recebeu o pedido!\n");
     semaphore_mutex_lock(sems->results_mutex);
+    data->results[op->id].rest_time=getCurrentTime();
     data->results[op->id].receiving_rest = rest_id;
     data->results[op->id].status = 'R';
     semaphore_mutex_unlock(sems->results_mutex);

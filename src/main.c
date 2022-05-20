@@ -289,6 +289,7 @@ void destroy_memory_buffers(struct main_data* data, struct communication_buffers
 
 
 void write_statistics(struct main_data* data){
+    printf("A escrever as estatisticas no ficheiro.\n");
     writeStatsToFile();
 }
 

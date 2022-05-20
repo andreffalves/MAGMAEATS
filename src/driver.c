@@ -43,7 +43,6 @@ void driver_receive_operation(struct operation* op, struct communication_buffers
         read_rest_driver_buffer(buffers->rest_driv, data->buffers_size, op);
         if(op->id!=-1){
             consume_end(sems->rest_driv);
-            op->driver_time=getCurrentTime();
         }
         else{
             produce_end(sems->rest_driv);
@@ -54,6 +53,7 @@ void driver_receive_operation(struct operation* op, struct communication_buffers
 void driver_process_operation(struct operation* op, int driver_id, struct main_data* data, int* counter, struct semaphores* sems){
     printf("O condutor recebeu o pedido!\n");
     semaphore_mutex_lock(sems->results_mutex);
+    data->results[op->id].driver_time=getCurrentTime();
     data->results[op->id].receiving_driver = driver_id;
     data->results[op->id].status = 'D';
     semaphore_mutex_unlock(sems->results_mutex);
