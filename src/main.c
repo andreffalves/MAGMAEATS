@@ -16,6 +16,7 @@ Rodrigo Antunes    | FC56321
 #include "mesignal.h"
 #include <signal.h>
 #include "log.h"
+#include "stats.h"
 
 
 struct main_data* data;
@@ -26,8 +27,6 @@ extern FILE *logFile;
 extern char* statsFileName;
 int term;
 
-//extern FILE *logFile;
-//extern char* statsFileName;
 
 
 int main(int argc, char *argv[]) {
@@ -290,20 +289,7 @@ void destroy_memory_buffers(struct main_data* data, struct communication_buffers
 
 
 void write_statistics(struct main_data* data){
-    int num_rest = data->n_restaurants;
-    for (int i = 0; i < num_rest; ++i) {
-        printf("Restaurante %d preparou %d pedidos\n",i,data->restaurant_stats[i]);
-    }
-
-    int num_driv = data->n_drivers;
-    for (int i = 0; i < num_driv; ++i) {
-        printf("Motorista %d entregou %d pedidos\n",i,data->driver_stats[i]);
-    }
-
-    int num_cli = data->n_clients;
-    for (int i = 0; i < num_cli; ++i) {
-        printf("Cliente %d recebeu %d pedidos\n",i,data->client_stats[i]);
-    }
+    writeStatsToFile();
 }
 
 
