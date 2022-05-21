@@ -1,3 +1,10 @@
+/*
+Grupo: SO-010
+Membros:
+Francisco Teixeira | FC56305
+Andre Alves        | FC56349
+Rodrigo Antunes    | FC56321
+*/
 #ifndef MAGMAEATS_LOG_H
 #define MAGMAEATS_LOG_H
 

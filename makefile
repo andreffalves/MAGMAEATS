@@ -1,3 +1,9 @@
+#Grupo: SO-010
+ #Membros:
+ #Francisco Teixeira | FC56305
+ #Andre Alves        | FC56349
+ #Rodrigo Antunes    | FC56321
+ #
 OBJ_dir = obj
 OBJECTOS = client.o driver.o main.o memory.o process.o restaurant.o synchronization.o metime.o configuration.o mesignal.o log.o stats.o
 CC = gcc
