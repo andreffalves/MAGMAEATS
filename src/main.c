@@ -30,7 +30,6 @@ int term;
 
 
 int main(int argc, char *argv[]) {
-    //stopMain();
 //init data structures
      data = create_dynamic_memory(sizeof(struct
             main_data));
@@ -220,7 +219,6 @@ void read_status(struct main_data* data, struct semaphores* sems){
                    temp_op.id,temp_op.status,temp_op.requesting_client,temp_op.requested_rest,temp_op.requested_dish,temp_op.receiving_driver,temp_op.requesting_client);
             break;
         case 'C':
-            //
             printf("Pedido %d com estado %c requisitado pelo cliente %d ao restaurante %d com o prato %s, foi tratado pelo restaurante %d, encaminhado pelo motorista %d, e enviado ao cliente %d!\n",
                    temp_op.id,temp_op.status,temp_op.requesting_client,temp_op.requested_rest,temp_op.requested_dish,temp_op.receiving_rest,temp_op.receiving_driver,temp_op.receiving_client);
             break;

@@ -2,8 +2,10 @@
 #include <stdlib.h>
 #include "main.h"
 #include <time.h>
+#include "synchronization.h"
 char* statsFileName;
 extern struct main_data* data;
+extern struct semaphores* sems;
 
 
 void writeStatsToFile(){
@@ -45,6 +47,7 @@ void writeStatsToFile(){
     long nanoDiff;
 
     fputs("\nRequest Statistics:\n",fp);
+    semaphore_mutex_lock(sems->results_mutex);
     for (int i = 0; i < data->max_ops; ++i) {
         struct operation temp= (data->results)[i];
         switch (temp.status) {
@@ -187,6 +190,7 @@ void writeStatsToFile(){
                 break;
 
         }
+        semaphore_mutex_unlock(sems->results_mutex);
     }
     fclose(fp);
 }

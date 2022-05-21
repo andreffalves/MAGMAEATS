@@ -54,7 +54,23 @@ void timerHandler(int sig){
         perror("Alarm Signal:");
         exit(-1);
     }
-    printf("3\n");
+    semaphore_mutex_lock(sems->results_mutex);
+    for (int i = 0; i < data->max_ops; ++i) {
+        char status = data->results[i].status;
+        if(status=='C'){
+            printf("request:%d status:%c start: %ld restaurant:%d rest_time:%ld\n"
+                   "driver:%d driver_time:%ld client:%d client_end_time:%ld \n"
+                   ,i,status,
+                   data->results[i].start_time.tv_sec,
+                   data->results[i].receiving_rest, data->results[i].rest_time.tv_sec,
+                   data->results[i].receiving_driver,data->results[i].driver_time.tv_sec,
+                   data->results[i].receiving_client, data->results[i].client_end_time.tv_sec );
+        }
+        else if(status=='I' || status=='R' || status =='D' ){
+            printf("request:%d status:%c\n",i,status);
+        }
+    }
+    semaphore_mutex_unlock(sems->results_mutex);
 }
 
 void setTimer(int secs){
