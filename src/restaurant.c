@@ -49,10 +49,6 @@ void restaurant_receive_operation(struct operation* op, int rest_id, struct comm
             }
             else{
                 produce_end(sems->main_rest);
-                /*codigo equivalente
-                sem_post(sems->main_rest->mutex);
-                sem_post(sems->main_rest->full);
-                 */
             }
 
         }
