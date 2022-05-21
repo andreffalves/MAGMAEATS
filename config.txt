@@ -5,4 +5,4 @@
 5
 log.txt
 stats.txt
-10
+1

@@ -97,7 +97,7 @@ void main_args(int argc, char* argv[], struct main_data* data){
     data->n_drivers = n_drivers;
     data->n_clients =n_clients;
 
-    //setTimer(alarmTime);
+    setTimer(alarmTime);
 }
 
 
@@ -136,6 +136,7 @@ void launch_processes(struct communication_buffers* buffers, struct main_data* d
 
 
 void user_interaction(struct communication_buffers* buffers, struct main_data* data, struct semaphores* sems){
+    stopMain();
     char buffer[50];
     int op_counter = 0;
     printf("Ações disponíveis:\n"

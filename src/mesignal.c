@@ -4,7 +4,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <sys/time.h>
-
+#include "synchronization.h"
 
 
 extern struct main_data* data;
@@ -20,12 +20,14 @@ void ignoreHandler(int sig){
 
 void stopMainHandler(int sig){
     stop_execution(data,buffers,sems);
+    exit(0);
 }
 
 void ignoreSignal(){
     struct sigaction sa;
     sa.sa_handler = ignoreHandler;
     sa.sa_flags = 0;
+    sigemptyset(&sa.sa_mask);
     if (sigaction(SIGINT, &sa, NULL) == -1) {
         perror("Ignore Signal:");
         exit(-1);
@@ -37,19 +39,28 @@ void stopMain(){
     struct sigaction sa;
     sa.sa_handler = stopMainHandler;
     sa.sa_flags = 0;
+    sigemptyset(&sa.sa_mask);
     if (sigaction(SIGINT, &sa, NULL) == -1) {
         perror("Stop Main:");
-        exit(-1);
+        exit(1);
     }
 }
 
 void timerHandler(int sig){
+    struct sigaction sa;
+    sa.sa_handler = timerHandler;
+    sa.sa_flags = SA_RESTART;
+    if (sigaction(SIGALRM, &sa, NULL) == -1) {
+        perror("Alarm Signal:");
+        exit(-1);
+    }
+    printf("3\n");
 }
 
 void setTimer(int secs){
     struct sigaction sa;
     sa.sa_handler = timerHandler;
-    sa.sa_flags = 0;
+    sa.sa_flags = SA_RESTART;
     if (sigaction(SIGALRM, &sa, NULL) == -1) {
         perror("Alarm Signal:");
         exit(-1);
