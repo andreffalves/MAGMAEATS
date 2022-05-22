@@ -25,7 +25,6 @@ struct semaphores* sems;
 
 extern FILE *logFile;
 extern char* statsFileName;
-int term;
 
 
 
@@ -144,9 +143,6 @@ void user_interaction(struct communication_buffers* buffers, struct main_data* d
            "        stop - termina a execução do magnaeats.\n"
            "        help - imprime informação sobre as ações disponíveis.\n");
     while (1){
-        if(term== 1) {
-            return;
-        }
         printf("Introduzir ação:\n");
         scanf("%s",buffer);
         if(strcmp(buffer,"help")==0){
@@ -245,7 +241,6 @@ void wait_processes(struct main_data* data){
 
 void stop_execution(struct main_data* data, struct communication_buffers* buffers, struct semaphores* sems){
     *(data->terminate)=1;
-    term = 1;
     closeLog();
     wakeup_processes(data,sems);
     wait_processes(data);
